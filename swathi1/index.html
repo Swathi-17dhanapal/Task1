@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Share Current Location</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em;
+    }
+    #output {
+      margin-top: 1em;
+      padding: 1em;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+    button {
+      padding: 0.5em 1em;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Share Your Current Location</h1>
+  <p>Click the button below to fetch your current location coordinates.</p>
+  <button id="getLocationBtn">Get Current Location</button>
+  <div id="output"></div>
+
+  <script>
+    // Function that initiates the geolocation request
+    function getLocation() {
+      if (navigator.geolocation) {
+        // Request the current position. The success callback is showPosition,
+        // and the error callback is showError.
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        // Browser doesn't support Geolocation API
+        document.getElementById('output').innerHTML = "Geolocation is not supported by this browser.";
+      }
+    }
+
+    // Success callback: Display the latitude and longitude on the page
+    function showPosition(position) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+      document.getElementById('output').innerHTML =
+        "<strong>Latitude:</strong> " + latitude + "<br>" +
+        "<strong>Longitude:</strong> " + longitude;
+    }
+
+    // Error callback: Handle errors and display appropriate messages
+    function showError(error) {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          document.getElementById('output').innerHTML = "User denied the request for Geolocation.";
+          break;
+        case error.POSITION_UNAVAILABLE:
+          document.getElementById('output').innerHTML = "Location information is unavailable.";
+          break;
+        case error.TIMEOUT:
+          document.getElementById('output').innerHTML = "The request to get user location timed out.";
+          break;
+        case error.UNKNOWN_ERROR:
+          document.getElementById('output').innerHTML = "An unknown error occurred.";
+          break;
+      }
+    }
+
+    // Attach an event listener to the button to trigger the location retrieval
+    document.getElementById('getLocationBtn').addEventListener('click', getLocation);
+  </script>
+</body>
+</html>
